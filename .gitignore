@@ -30,3 +30,7 @@ generated/*
 elf2uf2/*
 */elf2uf2/*
 */*/elf2uf2/*
+
+CMakeCache.txt
+*/CMakeCache.txt
+*/*/CMakeCache.txt
