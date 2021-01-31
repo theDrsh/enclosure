@@ -1,0 +1,37 @@
+#raspberry pi pico in cmake
+
+name: pico-build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Setup Env
+      run: |
+        sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
+        git clone https://github.com/raspberrypi/pico-sdk.git
+        cd pico-sdk
+        echo PICO_SDK_PATH=`pwd`
+        cd ..
+    - name: configure
+      run: |
+        cmake .
+    - name: make
+      run: make
