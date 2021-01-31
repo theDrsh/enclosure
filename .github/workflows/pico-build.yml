@@ -20,7 +20,7 @@ jobs:
         sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
         git clone https://github.com/raspberrypi/pico-sdk.git
         cd pico-sdk
-        echo PICO_SDK_PATH=`pwd`
+        set PICO_SDK_FETCH_FROM_GIT
         cd ..
     - name: configure
       run: |
