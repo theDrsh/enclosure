@@ -10,18 +10,14 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    env:
+      PICO_SDK_PATH: $GITHUB_WORKSPACE/pico-sdk
     steps:
     - uses: actions/checkout@v2
     - name: Setup Env
       run: |
         sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
-        git clone https://github.com/raspberrypi/pico-sdk.git
-        cd pico-sdk
-        set PICO_SDK_FETCH_FROM_GIT
-        cd ..
     - name: configure
       run: |
         cmake .
