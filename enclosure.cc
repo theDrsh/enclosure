@@ -6,10 +6,12 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "logger.h"
+#include "uComs/generated_files/generated_ucoms_decode.h"
 
 const int CMD_LEN = 64;
 volatile char CMD_BUF[CMD_LEN] = "\0";
 Logger g_log;
+uComsDecode g_decoder;
 
 void preParse(int input) {
   static int index = 0;
@@ -17,7 +19,6 @@ void preParse(int input) {
     // Nothing in buffer
     case -1:
       return;
-    case ' ':
     case '\r':
     case '\n':
       break;
@@ -29,6 +30,8 @@ void preParse(int input) {
   if (index > 0) {
     // Call parse on commands with 1 or more char
     g_log.Printf(kLogInfo, "Got: %s", CMD_BUF);
+    uComsDecodedCommand cmd = g_decoder.Decode((const char*)CMD_BUF);
+    g_log.Printf(kLogInfo, "Decoded:%s", GetDeviceKeyString(cmd.output).c_str());
   }
   index = 0;
   memset((void*)CMD_BUF, '\0', CMD_LEN);

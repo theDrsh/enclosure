@@ -15,9 +15,18 @@ jobs:
       PICO_SDK_FETCH_FROM_GIT: true
     steps:
     - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
     - name: Setup Env
       run: |
         sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
+        python3 ./uComs/ucoms.py -g --proto_yaml ./enclosure_protocol.yml
     - name: configure
       run: |
         cmake .

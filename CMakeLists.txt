@@ -16,12 +16,17 @@ include(example_auto_set_url.cmake)
 
 add_executable(enclosure enclosure.cc)
 
+# Logger
 add_library(logger logger.cc logger.h)
-
 target_link_libraries(logger pico_stdlib)
 
-# Pull in our pico_stdlib which aggregates commonly used features
-target_link_libraries(enclosure pico_stdlib logger)
+# uComs
+add_library(uComsDecode STATIC ./uComs/generated_files/generated_ucoms_decode.cc ./uComs/generated_files/generated_ucoms.cc)
+add_library(uComsUtils STATIC ./uComs/generated_files/generated_ucoms.cc)
+target_include_directories(enclosure PUBLIC ./uComs/generated_files/)
+
+# Link all libraries into enclosure executable
+target_link_libraries(enclosure pico_stdlib logger uComsDecode uComsUtils)
 
 # enable usb output, disable uart output
 pico_enable_stdio_usb(enclosure 1)
