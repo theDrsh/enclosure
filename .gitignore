@@ -10,6 +10,7 @@ Makefile
 *.dis
 *.elf*
 *.uf2
+*.a
 generated/*
 elf2uf2/*
 CMakeCache.txt

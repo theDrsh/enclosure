@@ -14,19 +14,21 @@ pico_sdk_init()
 
 include(example_auto_set_url.cmake)
 
-add_executable(hello_usb
-        hello_usb.c
-        )
+add_executable(enclosure enclosure.cc)
+
+add_library(logger logger.cc logger.h)
+
+target_link_libraries(logger pico_stdlib)
 
 # Pull in our pico_stdlib which aggregates commonly used features
-target_link_libraries(hello_usb pico_stdlib)
+target_link_libraries(enclosure pico_stdlib logger)
 
 # enable usb output, disable uart output
-pico_enable_stdio_usb(hello_usb 1)
-pico_enable_stdio_uart(hello_usb 0)
+pico_enable_stdio_usb(enclosure 1)
+pico_enable_stdio_uart(enclosure 0)
 
 # create map/bin/hex/uf2 file etc.
-pico_add_extra_outputs(hello_usb)
+pico_add_extra_outputs(enclosure)
 
 # add url via pico_set_program_url
-example_auto_set_url(hello_usb)
+example_auto_set_url(enclosure)
