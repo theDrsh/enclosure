@@ -26,6 +26,7 @@ jobs:
     - name: Setup Env
       run: |
         sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
+        git submodule update --init --recursive
         python3 ./uComs/ucoms.py -g --proto_yaml ./enclosure_protocol.yml
     - name: configure
       run: |
