@@ -4,7 +4,10 @@
 */
 
 #include <stdio.h>
+#include <stdint.h>
+#include "ext_libs/GFX.hpp"
 #include "pico/stdlib.h"
+#include "hardware/i2c.h"
 #include "logger.h"
 #include "uComs/generated_files/generated_ucoms_decode.h"
 
@@ -39,11 +42,11 @@ void preParse(int input) {
     uComsDecodedCommand cmd = g_decoder.Decode((const char*)CMD_BUF);
     g_log.Printf(kLogInfo, "Decoded:%s", GetDeviceKeyString(cmd.output).c_str());
     switch (cmd.output) {
-      case kCommandGetValueLedPinDevice:
+      case kCommandGetLedPinDevice:
         break;
-      case kCommandGetValuePWM1Device:
+      case kCommandGetPWM1Device:
         break;
-      case kCommandSetValueLedPinDevice:
+      case kCommandSetLedPinDevice:
         if (cmd.value.stored_type == uComsValueInt) {
           if (cmd.value.value_int >= 0 && cmd.value.value_int <= 1) {
             g_log.Printf(kLogInfo, "setting LED to %d", cmd.value.value_int);
@@ -53,7 +56,7 @@ void preParse(int input) {
           }
         }
         break;
-      case kCommandSetValuePWM1Device:
+      case kCommandSetPWM1Device:
         break;
       case kLenCommandsDevice:
         break;
@@ -67,10 +70,18 @@ void preParse(int input) {
 
 int main() {
   stdio_init_all();
+  i2c_init(i2c1, 400000);
+  gpio_set_function(2, GPIO_FUNC_I2C);
+  gpio_set_function(3, GPIO_FUNC_I2C);
+  gpio_pull_up(2);
+  gpio_pull_up(3);
+  GFX oled(0x3C, size::W128xH32, i2c1);
   gpio_init(LED_PIN);
   gpio_set_dir(LED_PIN, GPIO_OUT);
   getchar();
   g_log.Printf(kLogInfo, "Welcome to Pico Enclosure!");
+  oled.drawString(0,0, "Welcome to Pico Enclosure!");
+  oled.display();
   // Flush any unused input
   while (true) {
     preParse(getchar_timeout_us(100));

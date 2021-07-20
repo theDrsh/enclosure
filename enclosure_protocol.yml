@@ -11,7 +11,7 @@ Protocol:
   # Patterns define how an interaction between host and device takes place
   Interactions:
     # The name of the interaction type
-    GetValue:
+    Get:
       # The Command is the signature of what kind of interaction is taking place
       Command: 'G'
       # Host portion indicates what the host SENDS to the device
@@ -28,7 +28,7 @@ Protocol:
         4: Delimiter
         5: Value
         6: Footer
-    SetValue:
+    Set:
       ValueType: Int
       Command: 'S'
       Host:
@@ -45,9 +45,9 @@ Protocol:
         4: Footer
   Commands:
     # Here we define all of the arguments which will be placed in the above patterns
-    SetValue:
+    Set:
       LedPin: "L1"
       PWM1:   "P1"
-    GetValue:
+    Get:
       LedPin: "L1"
       PWM1:   "P1"

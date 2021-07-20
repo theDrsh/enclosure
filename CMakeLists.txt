@@ -23,10 +23,14 @@ target_link_libraries(logger pico_stdlib)
 # uComs
 add_library(uComsDecode STATIC ./uComs/generated_files/generated_ucoms_decode.cc ./uComs/generated_files/generated_ucoms.cc)
 add_library(uComsUtils STATIC ./uComs/generated_files/generated_ucoms.cc)
+
+add_library(SSD1306 STATIC ./ext_libs/SSD1306.cpp ./ext_libs/GFX.cpp)
+target_link_libraries(SSD1306 pico_stdlib hardware_i2c)
+
 target_include_directories(enclosure PUBLIC ./uComs/generated_files/)
 
 # Link all libraries into enclosure executable
-target_link_libraries(enclosure pico_stdlib logger uComsDecode uComsUtils)
+target_link_libraries(enclosure logger uComsDecode uComsUtils SSD1306)
 
 # enable usb output, disable uart output
 pico_enable_stdio_usb(enclosure 1)
